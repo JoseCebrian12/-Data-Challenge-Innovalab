@@ -36,6 +36,8 @@ loreto_districts <- districts %>% filter(departmento == "LORETO")
 
 str(population)
 summary(population)
+population <- population %>%
+  rename(ano = year)
 
 library(tidyr)
 #formato largo
