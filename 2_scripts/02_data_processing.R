@@ -21,7 +21,7 @@ dengue_loreto <- dengue %>%
   group_by(ano, semana, distrito) %>%
   summarize(total_casos = n(), .groups = 'drop')
 
-head(dengue_summary)
+head(dengue_loreto)
 
 # RESTO DE DATASETS
 
