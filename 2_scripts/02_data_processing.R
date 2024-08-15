@@ -53,4 +53,4 @@ temperature_long$semana <- as.numeric(format(temperature_long$date + 1, "%V"))
 temperature_long$ano <- as.numeric(format(temperature_long$date, "%Y"))
 
 table(temperature_long$semana)
-table(dengue_summary$semana)
+table(dengue_loreto$semana)
