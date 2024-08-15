@@ -16,5 +16,7 @@ Este análisis se ha implementado utilizando R y la aplicación final incluye un
 
 1. **Clonar este repositorio**:
    ```bash
-   git clone <URL_DEL_REPOSITORIO>
+   git clone https://github.com/JoseCebrian12/Data-Challenge-Innovalab
+
+   
 
