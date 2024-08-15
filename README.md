@@ -17,6 +17,12 @@ Este análisis se ha implementado utilizando R y la aplicación final incluye un
 1. **Clonar este repositorio**:
    ```bash
    git clone https://github.com/JoseCebrian12/Data-Challenge-Innovalab
+   ```
+2. Restaurar el entorno R con `renv`:
+   ```r
+   renv::restore()
+   ```
+
 
    
 
