@@ -32,8 +32,10 @@ temperature <- read.csv("1_data/mintemp_20170101-20221231.csv")
 str(districts)
 summary(districts)
 
+# solo elegimos los distritos de  Loreto
 loreto_districts <- districts %>% filter(departmento == "LORETO")
 
+# para integrar posteriormente unificamos los nombres
 str(population)
 summary(population)
 population <- population %>%
