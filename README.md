@@ -22,7 +22,15 @@ Este análisis se ha implementado utilizando R y la aplicación final incluye un
    ```r
    renv::restore()
    ```
+## Ejecución de la Aplicación Shiny
 
+Para ejecutar la aplicación Shiny:
+
+1. Navega a la carpeta `3_results/`.
+2. Ejecuta el siguiente comando en R:
+   ``` r
+   shiny::runApp('app.R')
+   ```
 
    
 
