@@ -1,46 +1,79 @@
 # Cargar librerías necesarias
 library(dplyr)
 library(ggplot2)
-library(broom)
+library(lme4)
+library(MASS)
+library(lmtest)
 
-# Usar el conjunto de datos final del ejercicio anterior
-# Asegúrate de que final_data contiene las columnas: ano, semana, distrito, total_casos, temp_min_semana
+# poisson
+modelo_poisson <- glm(total_casos ~ temp_min_semana, data = final_data, family = poisson())
 
-# Crear un modelo de regresión lineal generalizada (GLM) con una familia Poisson
-modelo_dengue <- glm(total_casos ~ temp_min_semana, 
-                     data = final_data, 
-                     family = poisson(link = "log"))
+# GLMM
+modelo_glmm <- glmer(total_casos ~ temp_min_semana + (1 | distrito), data = final_data, family = poisson())
 
-# Resumen del modelo
-summary(modelo_dengue)
+# negativa binomial
+modelo_negbinom <- glm.nb(total_casos ~ temp_min_semana, data = final_data)
 
-# Chequear el ajuste del modelo visualizando los residuos
-par(mfrow = c(2, 2))
-plot(modelo_dengue)
+summary(modelo_poisson)
+summary(modelo_glmm)
+summary(modelo_negbinom)
 
-# Predicciones del modelo
-final_data$predicted_cases <- predict(modelo_dengue, type = "response")
+# evaluación de la heterocedasticidad
+bptest_poisson <- bptest(modelo_poisson)
+print(bptest_poisson)
 
-# Graficar casos observados vs. casos predichos
-ggplot(final_data, aes(x = total_casos, y = predicted_cases)) +
-  geom_point() +
-  geom_abline(slope = 1, intercept = 0, color = "red") +
-  labs(x = "Casos Observados", y = "Casos Predichos", 
-       title = "Casos Observados vs. Casos Predichos por el Modelo") +
-  theme_minimal()
+# comparar AIC 
+aic_poisson <- AIC(modelo_poisson)
+aic_glmm <- AIC(modelo_glmm)
+aic_negbinom <- AIC(modelo_negbinom)
 
-# Graficar la relación entre temperatura mínima y número de casos
+cat("AIC Modelo Poisson: ", aic_poisson, "\n")
+cat("AIC Modelo GLMM: ", aic_glmm, "\n")
+cat("AIC Modelo Negativa Binomial: ", aic_negbinom, "\n")
+
+# Diagnóstico del modelo GLMM: gráficos de residuos
+plot(modelo_glmm)
+
+# Gráfico de dispersión entre casos y temperatura con la curva ajustada para GLMM
 ggplot(final_data, aes(x = temp_min_semana, y = total_casos)) +
-  geom_point() +
-  geom_smooth(method = "glm", method.args = list(family = "poisson"), color = "blue") +
-  labs(x = "Temperatura Mínima Semanal", y = "Casos de Dengue", 
-       title = "Relación entre Temperatura Mínima y Casos de Dengue") +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "glm", method.args = list(family = "poisson"), col = "blue") +
+  labs(title = "Relación entre Temperatura Mínima y Casos de Dengue",
+       x = "Temperatura Mínima Semanal (°C)",
+       y = "Total Casos de Dengue") +
   theme_minimal()
 
-# Guardar las tablas de coeficientes y ajuste del modelo
-coeficientes <- tidy(modelo_dengue)
-ajuste_modelo <- glance(modelo_dengue)
+# predicciones y gráfico comparativo entre valores observados y ajustados para todos los modelos
+final_data$predicciones_poisson <- predict(modelo_poisson, type = "response")
+final_data$predicciones_glmm <- predict(modelo_glmm, type = "response")
+final_data$predicciones_negbinom <- predict(modelo_negbinom, type = "response")
 
-# Imprimir tablas
-print(coeficientes)
-print(ajuste_modelo)
+ggplot(final_data, aes(x = total_casos)) +
+  geom_point(aes(y = predicciones_poisson), color = "blue", alpha = 0.5) +
+  geom_point(aes(y = predicciones_glmm), color = "green", alpha = 0.5) +
+  geom_point(aes(y = predicciones_negbinom), color = "orange", alpha = 0.5) +
+  geom_abline(intercept = 0, slope = 1, col = "red") +
+  labs(title = "Comparación de Casos Observados vs. Predicciones",
+       x = "Casos Observados",
+       y = "Casos Predichos") +
+  theme_minimal() +
+  scale_y_continuous(sec.axis = sec_axis(~ ., name = "Predicciones por Modelo")) +
+  guides(colour = guide_legend(title = "Modelos"))
+
+# evaluación y selección del mejor modelo según AIC y gráficos de diagnóstico
+
+# gráfico de residuos para evaluar la calidad del ajuste del modelo de Negativa Binomial
+ggplot(final_data, aes(x = predicciones_negbinom, y = residuals(modelo_negbinom, type = "pearson"))) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", col = "red") +
+  labs(title = "Residuos vs Predicciones (Negativa Binomial)",
+       x = "Predicciones (Negativa Binomial)",
+       y = "Residuos Pearson") +
+  theme_minimal()
+
+# tabla comparativa de los modelos
+tabla_modelos <- data.frame(
+  Modelo = c("Poisson", "GLMM", "Negativa Binomial"),
+  AIC = c(aic_poisson, aic_glmm, aic_negbinom)
+)
+print(tabla_modelos)
