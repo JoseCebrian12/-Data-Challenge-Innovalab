@@ -57,6 +57,9 @@ ui <- fluidPage(
              ),
              fluidRow(
                column(12, tableOutput("confint_tabla"), align = "center")
+             ),
+             fluidRow(
+               column(12, tableOutput("confint_explanation"), align = "center")
              )
     )
   )
@@ -93,6 +96,61 @@ server <- function(input, output) {
     p
   })
   
+  # Gráfico de temperatura mínima por semana
+  output$plot_temp_minima <- renderPlotly({
+    plot_data <- filtered_data()
+    p <- plot_ly(plot_data, x = ~semana_continua, y = ~temp_min_semana, type = 'scatter', mode = 'lines',
+                 name = 'Temp Mínima',
+                 line = list(shape = 'spline', color = 'rgba(255, 193, 7, 0.6)'),
+                 hoverinfo = 'text', text = ~paste("Año:", ano, "<br>Semana:", semana, "<br>Temp Min:", temp_min_semana)) %>%
+      layout(
+        title = 'Temperatura Mínima por Semana',
+        xaxis = list(title = '', showticklabels = FALSE),
+        yaxis = list(title = 'Temp Mínima (°C)'),
+        plot_bgcolor = 'rgba(0,0,0,0)',  
+        paper_bgcolor = 'rgba(0,0,0,0)', 
+        font = list(color = '#333333')   
+      )
+    p
+  })
+  
+  # Gráfico de total de casos por semana
+  output$plot_total_casos <- renderPlotly({
+    plot_data <- filtered_data()
+    p <- plot_ly(plot_data, x = ~semana_continua, y = ~total_casos, type = 'scatter', mode = 'lines',
+                 name = 'Total Casos',
+                 line = list(shape = 'spline', color = 'rgba(33, 37, 41, 0.8)'),
+                 hoverinfo = 'text', text = ~paste("Año:", ano, "<br>Semana:", semana, "<br>Total Casos:", total_casos)) %>%
+      layout(
+        title = 'Total de Casos por Semana',
+        xaxis = list(title = '', showticklabels = FALSE),
+        yaxis = list(title = 'Total Casos'),
+        plot_bgcolor = 'rgba(0,0,0,0)',  
+        paper_bgcolor = 'rgba(0,0,0,0)', 
+        font = list(color = '#333333')   
+      )
+    p
+  })
+  
+  # Gráfico de población por semana
+  output$plot_poblacion <- renderPlotly({
+    plot_data <- filtered_data()
+    p <- plot_ly(plot_data, x = ~semana_continua, y = ~population, type = 'scatter', mode = 'lines',
+                 name = 'Población',
+                 line = list(shape = 'spline', color = 'rgba(40, 167, 69, 0.8)'),
+                 hoverinfo = 'text', text = ~paste("Año:", ano, "<br>Semana:", semana, "<br>Población:", population)) %>%
+      layout(
+        title = 'Población por Semana',
+        xaxis = list(title = '', showticklabels = FALSE),
+        yaxis = list(title = 'Población'),
+        plot_bgcolor = 'rgba(0,0,0,0)',  
+        paper_bgcolor = 'rgba(0,0,0,0)', 
+        font = list(color = '#333333')   
+      )
+    p
+  })
+  
+  # Gráfico de residuos para el modelo de Negativa Binomial
   output$plot_residuos <- renderPlotly({
     plot_ly(final_data, x = ~predicciones_negbinom, y = ~residuals(modelo_negbinom, type = "pearson"), type = 'scatter', mode = 'markers') %>%
       layout(
@@ -102,6 +160,7 @@ server <- function(input, output) {
       )
   })
   
+  # Gráfico de comparación entre casos observados y predichos para el modelo de Negativa Binomial
   output$plot_observados_predichos <- renderPlotly({
     plot_ly(final_data, x = ~total_casos, y = ~predicciones_negbinom, type = 'scatter', mode = 'markers') %>%
       layout(
@@ -111,6 +170,7 @@ server <- function(input, output) {
       )
   })
   
+  # resumen del modelo de Negativa Binomial
   output$summary_text <- renderText({
     "Este resumen del modelo de Negativa Binomial muestra los coeficientes estimados, errores estándar, valores z y p-valores asociados. Esto indica la relación entre la temperatura mínima semanal y los casos de dengue."
   })
@@ -119,6 +179,11 @@ server <- function(input, output) {
     as.data.frame(summary(modelo_negbinom)$coefficients)
   })
   
+  output$summary_explanation <- renderText({
+    "El coeficiente estimado para 'temp_min_semana' muestra que un aumento en la temperatura mínima semanal está asociado con un aumento en los casos de dengue. Un p-valor menor de 0.05 indica que esta relación es estadísticamente significativa."
+  })
+  
+  # ANOVA del modelo de Negativa Binomial
   output$anova_text <- renderText({
     "La tabla de ANOVA muestra los resultados del análisis de la devianza del modelo, indicando la significancia estadística de la temperatura mínima semanal en la predicción de los casos de dengue."
   })
@@ -127,12 +192,21 @@ server <- function(input, output) {
     as.data.frame(anova(modelo_negbinom, test = "Chisq"))
   })
   
+  output$anova_explanation <- renderText({
+    "La baja devianza residual en comparación con la devianza nula sugiere que el modelo de Negativa Binomial ajusta bien los datos. Un p-valor bajo (< 0.05) para 'temp_min_semana' en la tabla ANOVA indica una influencia significativa en los casos de dengue."
+  })
+  
+  # intervalos de confianza para los coeficientes del modelo de Negativa Binomial
   output$confint_text <- renderText({
     "Los intervalos de confianza para los coeficientes del modelo de Negativa Binomial proporcionan un rango dentro del cual se espera que los coeficientes verdaderos caigan con un 95% de confianza."
   })
   
   output$confint_tabla <- renderTable({
     as.data.frame(confint(modelo_negbinom))
+  })
+  
+  output$confint_explanation <- renderText({
+    "Un intervalo de confianza estrecho indica precisión en la estimación del coeficiente, lo cual es deseable. El intervalo para 'temp_min_semana' no incluye el valor 0, lo que refuerza la significancia de su influencia en los casos de dengue."
   })
 }
 
