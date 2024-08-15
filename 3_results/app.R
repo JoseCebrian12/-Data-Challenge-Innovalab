@@ -5,7 +5,7 @@ library(ggplot2)
 library(lme4)
 library(MASS)
 
-final_data <- read.csv("final_data.csv")
+final_data <- read.csv("3_results/final_data.csv")
 
 # modelo
 modelo_negbinom <- glm.nb(total_casos ~ temp_min_semana, data = final_data)

@@ -1,5 +1,5 @@
 # unir los datos de dengue con los distritos de Loreto
-merged_data <- dengue_loreto %>%
+merged_data <- dengue_loreto_completo %>%
   inner_join(loreto_districts, by = "distrito")
 
 # unir los datasets, calcular la temperatura mínima por semana y filtrar los datos según el objetivo analítico
