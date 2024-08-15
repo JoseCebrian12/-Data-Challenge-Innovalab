@@ -18,9 +18,9 @@ Este análisis se ha implementado utilizando R y la aplicación final incluye un
    ```bash
    git clone https://github.com/JoseCebrian12/Data-Challenge-Innovalab
    ```
-2. Abrir el proyecto en RStudio:
-Abra el archivo Data-Challenge-Innovalab.Rproj para cargar el entorno de trabajo configurado.
-3. Restaurar el entorno R con `renv`:
+2. Abrir el proyecto en RStudio
+   Abra el archivo Data-Challenge-Innovalab.Rproj para cargar el entorno de trabajo configurado.
+4. Restaurar el entorno R con `renv`:
    ```r
    renv::restore()
    ```
