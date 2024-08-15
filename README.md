@@ -9,7 +9,7 @@ Este análisis se ha implementado utilizando R y la aplicación final incluye un
 
 - `1_data/`: Contiene los datos utilizados en el análisis.
 - `2_scripts/`: Scripts R para el procesamiento y análisis de datos.
-- `3_results/`: Contiene la aplicación Shiny (`app.R`) y otros resultados finales.
+- `3_results/`: Contiene la aplicación Shiny (`app.R`) que muestra los resultados finales.
 - `renv/`: Carpeta para la gestión de dependencias del proyecto.
 
 ## Instrucciones de Instalación
@@ -31,6 +31,3 @@ Para ejecutar la aplicación Shiny:
    ``` r
    shiny::runApp('app.R')
    ```
-
-   
-
