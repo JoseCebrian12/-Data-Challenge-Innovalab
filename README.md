@@ -14,11 +14,13 @@ Este análisis se ha implementado utilizando R y la aplicación final incluye un
 
 ## Instrucciones de Instalación
 
-1. **Clonar este repositorio**:
+1. Clonar este repositorio:
    ```bash
    git clone https://github.com/JoseCebrian12/Data-Challenge-Innovalab
    ```
-2. Restaurar el entorno R con `renv`:
+2. Abrir el proyecto en RStudio:
+Abra el archivo Data-Challenge-Innovalab.Rproj para cargar el entorno de trabajo configurado.
+3. Restaurar el entorno R con `renv`:
    ```r
    renv::restore()
    ```
