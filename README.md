@@ -1,36 +1,42 @@
-# Data Challenge Innovalab
+# Análisis de la Incidencia de Dengue en Loreto
 
 ## Descripción del Proyecto
-El objetivo de este proyecto es desarrollar un modelo estadístico para evaluar el efecto de la temperatura mínima sobre la incidencia de dengue por semana epidemiológica en los distritos del departamento de Loreto durante los años 2017 a 2022.
 
-Este análisis se ha implementado utilizando R y la aplicación final incluye una interfaz interactiva en Shiny para visualizar los resultados y evaluar el ajuste del modelo.
+Este proyecto tiene como objetivo analizar el impacto de la temperatura mínima en la incidencia del dengue en los distritos del departamento de Loreto durante los años 2017 a 2022. Utiliza técnicas de modelado estadístico para evaluar la relación entre variables climáticas y la cantidad de casos de dengue, proporcionando una visualización interactiva que facilita la exploración de los resultados.
+
+Este análisis incluye:
+- Modelos de regresión binomial negativa y Poisson para ajustar la relación entre la temperatura y los casos de dengue.
+- Análisis de residuos y pruebas de sobredispersión para justificar el uso de modelos de conteo.
+- Visualización interactiva para explorar los datos por distrito y la evolución de las variables.
 
 ## Estructura del Repositorio
 
-- `1_data/`: Contiene los datos utilizados en el análisis.
-- `2_scripts/`: Scripts R para el procesamiento y análisis de datos.
-- `3_results/`: Contiene la aplicación Shiny (`app.R`) que muestra los resultados finales.
-- `renv/`: Carpeta para la gestión de dependencias del proyecto.
-
+- `1_data/`: Conjunto de datos procesados utilizados en el análisis.
+- `2_scripts/`: Scripts de procesamiento, análisis estadístico y visualización de datos utilizando Python.
+- `3_results/`: Visualizaciones y resultados obtenidos a partir de los modelos.
+- `requirements.txt`: Dependencias necesarias para ejecutar el proyecto.
+  
 ## Instrucciones de Instalación
 
-1. Clonar este repositorio:
+1. Clona este repositorio:
    ```bash
    git clone https://github.com/JoseCebrian12/Data-Challenge-Innovalab
    ```
-2. Abrir el proyecto en RStudio
-   
-   - Abra el archivo Data-Challenge-Innovalab.Rproj para cargar el entorno de trabajo configurado.
-4. Restaurar el entorno R con `renv`:
-   ```r
-   renv::restore()
+2. Instala las dependencias utilizando pip:
+   ```bash
+   pip install -r requirements.txt
    ```
-## Ejecución de la Aplicación Shiny
 
-Para ejecutar la aplicación Shiny:
+## Ejecución de la Aplicación Streamlit
 
-1. Navega a la carpeta `3_results/`.
-2. Ejecuta el siguiente comando en R:
-   ``` r
-   shiny::runApp('app.R')
-   ```
+Para visualizar la aplicación interactiva con los resultados del análisis, puedes acceder a la versión desplegada de la aplicación [aquí](https://dengue-loreto-incidence.streamlit.app).
+
+Esto desplegará una aplicación interactiva donde podrás seleccionar el distrito y observar la evolución de los casos de dengue junto con las temperaturas mínimas por semana.
+
+## Tecnologías Utilizadas
+
+- **Python**: Para el procesamiento de datos y análisis estadístico.
+- **Streamlit**: Para la creación de una interfaz interactiva.
+- **Plotly**: Para la visualización gráfica de los resultados.
+- **Pandas**: Para la manipulación de datos.
+- **Statsmodels**: Para los modelos de regresión Poisson y Binomial Negativa.
