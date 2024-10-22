@@ -26,6 +26,11 @@ Este análisis incluye:
    ```bash
    pip install -r requirements.txt
    ```
+## Reporte de Modelamiento Estadístico
+
+Para más detalles sobre el análisis de modelamiento estadístico realizado, puedes consultar el siguiente reporte en PDF:
+
+- [Reporte de Modelamiento Estadístico](4_reports/statistical_modeling_report.pdf)
 
 ## Ejecución de la Aplicación Streamlit
 
