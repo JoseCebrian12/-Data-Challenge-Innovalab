@@ -1,7 +1,3 @@
-Aquí tienes una versión mejorada de tu README, con ajustes para mayor claridad y presentación:
-
----
-
 # Análisis de la Incidencia de Dengue en Loreto
 
 ## Descripción del Proyecto
